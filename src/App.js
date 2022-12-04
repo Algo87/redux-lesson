@@ -1,9 +1,46 @@
 import './App.css';
+import {useDispatch, useSelector} from "react-redux";
+import {addCustomerAction, removeCustomerAction} from "./srore/customerReducer";
 
 function App() {
+  const dispatch = useDispatch();
+  const cash = useSelector(state => state.cash.cash);
+  const customers = useSelector(state => state.customers.customers);
+
+  const addCash = (cash) => {
+    dispatch({type: "ADD_CASH", payload: cash})
+  }
+
+  const getCash = (cash) => {
+    dispatch(({type: "GET_CASH", payload: cash}))
+  }
+
+  const addCustomer = (name) => {
+    const customer = {
+      name,
+      id: Date.now()
+    }
+    dispatch(addCustomerAction(customer))
+  }
+
+  const removeCustomer = (customer)=>{
+    dispatch(removeCustomerAction(customer.id))
+  }
+
   return (
     <div className="App">
-     ghj
+      <div>{cash}</div>
+      <div style={{display: "flex", textAlign: "center", justifyContent: "center"}}>
+        <button onClick={() => addCash(Number(prompt()))}>+</button>
+        <button onClick={() => getCash(Number(prompt()))}>-</button>
+
+      </div>
+      <button onClick={() => addCustomer(prompt())}>+ client</button>
+      {customers.length <= 0
+        ? <div>Клиентов нет</div>
+        : <div>{customers.map((customer, index) => {
+          return <div key={index} onClick={()=>removeCustomer(customer)}>{customer.name}</div>
+        })}</div>}
     </div>
   );
 }
