@@ -1,6 +1,8 @@
 import './App.css';
 import {useDispatch, useSelector} from "react-redux";
-import {addCustomerAction, removeCustomerAction} from "./srore/customerReducer";
+import {addCustomerAction, addFetchCustomers, removeCustomerAction} from "./srore/customerReducer";
+import {fetchCustomers} from "./AsyncActions/customers";
+import {asyncDecrementAction, asyncIncrementAction, decrementAction, incrementAction} from "./srore/cashReducer";
 
 function App() {
   const dispatch = useDispatch();
@@ -31,11 +33,12 @@ function App() {
     <div className="App">
       <div>{cash}</div>
       <div style={{display: "flex", textAlign: "center", justifyContent: "center"}}>
-        <button onClick={() => addCash(Number(prompt()))}>+</button>
-        <button onClick={() => getCash(Number(prompt()))}>-</button>
+        <button onClick={() => dispatch(asyncIncrementAction())}>+</button>
+        <button onClick={() => dispatch(asyncDecrementAction())}>-</button>
 
       </div>
       <button onClick={() => addCustomer(prompt())}>+ client</button>
+      <button onClick={() => dispatch(addFetchCustomers())}>get clients from BD</button>
       {customers.length <= 0
         ? <div>Клиентов нет</div>
         : <div>{customers.map((customer, index) => {
